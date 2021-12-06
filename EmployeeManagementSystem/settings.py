@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+from django.contrib.messages import constants as messages
 from pathlib import Path
 import os
 
@@ -49,6 +49,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'employee.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'EmployeeManagementSystem.urls'
@@ -138,3 +140,10 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'employee_view'
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}

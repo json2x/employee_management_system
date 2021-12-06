@@ -24,6 +24,8 @@ class PersonalData(models.Model):
     gender = models.CharField(max_length=7, choices=CHOICES_GENDER,)
     civil_status = models.CharField(max_length=8, choices=CHOICES_CIVIL_STATUS,)
     religion = models.CharField(max_length=250)
+    email = models.EmailField(max_length=250)
+    phone_number = models.CharField(max_length=25)
 
     def __str__(self) -> str:
         return self.revrse_full_name()

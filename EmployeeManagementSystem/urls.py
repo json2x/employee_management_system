@@ -15,12 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from employee import views as employee_views
-
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.conf.urls.static import static
 
+from employee import views as employee_views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ems/login', employee_views.LoginView.as_view(), name='login'),
+    path('ems/login/', employee_views.LoginView.as_view(), name='login'),
+    path('ems/logout/', employee_views.logout_view, name='logout'),
+
+    path('', employee_views.index, name='index_page'),
+    path('ems/employee/', employee_views.EmployeeView.as_view(), name='employee_view'),
+    path('ems/employee/register/', employee_views.EmployeeRegister.as_view(), name='employee_register'),
 ]

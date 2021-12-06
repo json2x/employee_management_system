@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
                 ('unit', models.CharField(blank=True, max_length=250, null=True)),
                 ('subunit', models.CharField(blank=True, max_length=250, null=True)),
                 ('section', models.CharField(blank=True, max_length=250, null=True)),
-                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Employee.personaldata')),
+                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='employee.personaldata')),
             ],
             options={
                 'verbose_name_plural': 'Work Profile',
@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('reports_to_id', models.PositiveIntegerField(blank=True, null=True)),
-                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Employee.personaldata')),
+                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='employee.personaldata')),
             ],
         ),
         migrations.CreateModel(
@@ -79,7 +79,7 @@ class Migration(migrations.Migration):
                 ('philhealth', models.CharField(blank=True, max_length=250, null=True)),
                 ('sss', models.CharField(blank=True, max_length=250, null=True)),
                 ('gsis', models.CharField(blank=True, max_length=250, null=True)),
-                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Employee.personaldata')),
+                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='employee.personaldata')),
             ],
             options={
                 'verbose_name_plural': 'Government Related',
@@ -97,7 +97,7 @@ class Migration(migrations.Migration):
                 ('relationship', models.CharField(choices=[('Mother', 'Mother'), ('Father', 'Father'), ('Sibling', 'Sibling'), ('Wife', 'Wife'), ('Child', 'Child')], max_length=7)),
                 ('address', models.CharField(blank=True, max_length=250, null=True)),
                 ('phone_number', models.CharField(max_length=25)),
-                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Employee.personaldata')),
+                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='employee.personaldata')),
             ],
             options={
                 'verbose_name_plural': 'Family Members',
@@ -127,7 +127,7 @@ class Migration(migrations.Migration):
                 ('old_section', models.CharField(blank=True, max_length=250, null=True)),
                 ('new_section', models.CharField(blank=True, max_length=250, null=True)),
                 ('update_date', models.DateField(auto_now=True)),
-                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Employee.personaldata')),
+                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='employee.personaldata')),
             ],
         ),
         migrations.CreateModel(
@@ -141,7 +141,7 @@ class Migration(migrations.Migration):
                 ('minor', models.CharField(blank=True, max_length=250, null=True)),
                 ('degree', models.CharField(blank=True, max_length=250, null=True)),
                 ('award', models.CharField(blank=True, max_length=250, null=True)),
-                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Employee.personaldata')),
+                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='employee.personaldata')),
             ],
             options={
                 'verbose_name_plural': 'Education',
@@ -155,7 +155,7 @@ class Migration(migrations.Migration):
                 ('penalty', models.CharField(blank=True, max_length=250, null=True)),
                 ('start', models.DateField(blank=True, null=True)),
                 ('end', models.DateField(blank=True, null=True)),
-                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Employee.personaldata')),
+                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='employee.personaldata')),
             ],
             options={
                 'verbose_name_plural': 'Disciplinary Action',
@@ -169,7 +169,7 @@ class Migration(migrations.Migration):
                 ('address', models.CharField(max_length=250)),
                 ('contact_person', models.CharField(blank=True, max_length=25, null=True)),
                 ('phone_number', models.CharField(blank=True, max_length=25, null=True)),
-                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Employee.personaldata')),
+                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='employee.personaldata')),
             ],
             options={
                 'verbose_name_plural': 'Contact Information',
