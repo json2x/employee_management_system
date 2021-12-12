@@ -5,6 +5,66 @@ import uuid
 import math
 
 # Create your models here.
+class LocationQuerySet(models.QuerySet):
+    
+    def regions(self):
+        return self.values('province').distinct()
+
+    def provinces(self, region=None):
+        if region:
+            return self.values('province').filter(region=region).distinct()
+        else:
+            return self.values('province').distinct()
+
+    def cities(self, province=None):
+        if province:
+            return self.values('city_muni').filter(province=province).filter(level='City').distinct()
+        else:
+            return self.values('city_muni').filter(level='City').distinct()
+
+    def municipalities(self, province=None):
+        if province:
+            return self.values('city_muni').filter(province=province).filter(level='Mun').distinct()
+        else:
+            return self.values('city_muni').filter(level='Mun').distinct()
+
+    def citymun(self, province=None):
+        if province:
+            return self.values('city_muni').filter(province=province).distinct()
+        else:
+            return self.values('city_muni').distinct()
+
+class LocationManager(models.Manager):
+    def get_queryset(self):
+        return LocationQuerySet(self.model, using=self._db)
+
+    def regions(self):
+        return self.get_queryset().regions()
+
+    def provinces(self, region=None):
+        return self.get_queryset().provinces(region)
+
+    def cities(self, province=None):
+        return self.get_queryset().cities(province)
+
+    def municipalities(self, province=None):
+        return self.get_queryset().municipalities(province)
+
+    def citymun(self, province=None):
+        return self.get_queryset().citymun(province)
+
+class Location(models.Model):
+    region = models.CharField(max_length=250)
+    province = models.CharField(max_length=250)
+    city_muni = models.CharField(max_length=250)
+    level = models.CharField(max_length=10)
+
+    lists = LocationManager()
+
+    def __str__(self) -> str:
+        return '{} {}'.format(self.city_muni, self.province)
+
+
 class PersonalData(models.Model):
     CHOICES_CIVIL_STATUS = [
         ('Single', 'Single'),
@@ -16,6 +76,15 @@ class PersonalData(models.Model):
         ('Male', 'Male'),
         ('Female', 'Female'),
     ]
+    CHOICES_EMERGENCY_RELATIONSHIP = [
+        ('Mother', 'Mother'),
+        ('Father', 'Father'),
+        ('Sibling', 'Sibling'),
+        ('Wife', 'Wife'),
+        ('Child', 'Child'),
+        ('Relative', 'Relative'),
+        ('Others', 'Others'),
+    ]
     first_name = models.CharField(max_length=250)
     middle_name = models.CharField(max_length=250)
     last_name = models.CharField(max_length=250)
@@ -24,19 +93,30 @@ class PersonalData(models.Model):
     gender = models.CharField(max_length=7, choices=CHOICES_GENDER,)
     civil_status = models.CharField(max_length=8, choices=CHOICES_CIVIL_STATUS,)
     religion = models.CharField(max_length=250)
+    
+    #Contact Information
     email = models.EmailField(max_length=250)
-    phone_number = models.CharField(max_length=25)
+    mobile_number = models.CharField(max_length=25)
+    landline_number = models.CharField(max_length=25, blank=True, null=True)
+    present_address = models.CharField(max_length=250)
+    present_city = models.CharField(max_length=250)
+    present_province = models.CharField(max_length=250)
+    provincial_address = models.CharField(max_length=250, blank=True, null=True)
+    office_address = models.CharField(max_length=250, blank=True, null=True)
+    emergency_contact_person = models.CharField(max_length=250)
+    emergency_contact_number = models.CharField(max_length=250)
+    emergency_contact_relationship = models.CharField(max_length=10, choices=CHOICES_EMERGENCY_RELATIONSHIP)
 
     def __str__(self) -> str:
-        return self.revrse_full_name()
+        return self.reverse_full_name()
 
     def full_name(self) -> str:
         return '{} {}'.format(self.first_name, self.last_name)
     full_name.short_description = 'Name'
 
-    def revrse_full_name(self) -> str:
+    def reverse_full_name(self) -> str:
         return '{}, {}'.format(self.last_name, self.first_name)
-    revrse_full_name.short_description = 'Name'
+    reverse_full_name.short_description = 'Name'
 
     def age(self):
         age = datetime.date.today() - self.birth_date
@@ -65,15 +145,15 @@ class Family(models.Model):
     employee = models.ForeignKey(PersonalData, on_delete=CASCADE)
 
     def __str__(self) -> str:
-        return self.revrse_full_name()
+        return self.reverse_full_name()
 
     def full_name(self) -> str:
         return '{} {}'.format(self.first_name, self.last_name)
     full_name.short_description = 'Name'
 
-    def revrse_full_name(self) -> str:
+    def reverse_full_name(self) -> str:
         return '{}, {}'.format(self.last_name, self.first_name)
-    revrse_full_name.short_description = 'Name'
+    reverse_full_name.short_description = 'Name'
 
     def age(self):
         delta = datetime.date.today() - self.birth_date
@@ -81,24 +161,6 @@ class Family(models.Model):
 
     class Meta:
         verbose_name_plural = 'Family Members'
-
-class ContactInformation(models.Model):
-    CHOICES_TYPE = [
-        ('TR', 'Temporary Residence'),
-        ('PR', 'Permanent Residence'),
-        ('PA', 'Provincial Address'),
-        ('OL', 'Office Location'),
-        ('EC', 'Emergency Contact'),
-    ]
-    type= models.CharField(max_length=250, choices=CHOICES_TYPE)
-    address = models.CharField(max_length=250)
-    contact_person = models.CharField(max_length=25, blank=True, null=True)
-    phone_number = models.CharField(max_length=25, blank=True, null=True)
-    employee = models.ForeignKey(PersonalData, on_delete=CASCADE)
-
-    class Meta:
-        verbose_name_plural = 'Contact Information'
-    
 
 class GovernmentRelated(models.Model):
     tin = models.CharField(max_length=250)
@@ -218,5 +280,22 @@ class Organization(models.Model):
     def get_org_tree(self):
         #logic to be continued
         pass
+
+# class ContactInformation(models.Model):
+#     CHOICES_TYPE = [
+#         ('TR', 'Temporary Residence'),
+#         ('PR', 'Permanent Residence'),
+#         ('PA', 'Provincial Address'),
+#         ('OL', 'Office Location'),
+#         ('EC', 'Emergency Contact'),
+#     ]
+#     type= models.CharField(max_length=250, choices=CHOICES_TYPE)
+#     address = models.CharField(max_length=250)
+#     contact_person = models.CharField(max_length=25, blank=True, null=True)
+#     phone_number = models.CharField(max_length=25, blank=True, null=True)
+#     employee = models.ForeignKey(PersonalData, on_delete=CASCADE)
+
+#     class Meta:
+#         verbose_name_plural = 'Contact Information'
 
 
