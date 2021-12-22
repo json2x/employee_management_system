@@ -47,5 +47,9 @@ class EmployeeView(TemplateView):
     template_name = "employee/profile.html"
     #model = PersonalData
 
-class EmployeeRegister(TemplateView):
+class EmployeeRegister(View):
     template_name = "employee/register.html"
+
+    def get(self, request):
+        context = {}
+        return render(request, self.template_name, context)

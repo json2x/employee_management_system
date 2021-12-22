@@ -8,31 +8,31 @@ import math
 class LocationQuerySet(models.QuerySet):
     
     def regions(self):
-        return self.values('province').distinct()
+        return self.values('region').order_by('region').distinct()
 
     def provinces(self, region=None):
         if region:
-            return self.values('province').filter(region=region).distinct()
+            return self.values('province').filter(region=region).order_by('province').distinct()
         else:
-            return self.values('province').distinct()
+            return self.values('province').order_by('province').distinct()
 
     def cities(self, province=None):
         if province:
-            return self.values('city_muni').filter(province=province).filter(level='City').distinct()
+            return self.values('city_muni').filter(province=province).filter(level='City').order_by('city_muni').distinct()
         else:
-            return self.values('city_muni').filter(level='City').distinct()
+            return self.values('city_muni').filter(level='City').order_by('city_muni').distinct()
 
     def municipalities(self, province=None):
         if province:
-            return self.values('city_muni').filter(province=province).filter(level='Mun').distinct()
+            return self.values('city_muni').filter(province=province).filter(level='Mun').order_by('city_muni').distinct()
         else:
-            return self.values('city_muni').filter(level='Mun').distinct()
+            return self.values('city_muni').filter(level='Mun').order_by('city_muni').distinct()
 
-    def citymun(self, province=None):
+    def citymuni(self, province=None):
         if province:
-            return self.values('city_muni').filter(province=province).distinct()
+            return self.values('city_muni').filter(province=province).order_by('city_muni').distinct()
         else:
-            return self.values('city_muni').distinct()
+            return self.values('city_muni').order_by('city_muni').distinct()
 
 class LocationManager(models.Manager):
     def get_queryset(self):
@@ -50,8 +50,8 @@ class LocationManager(models.Manager):
     def municipalities(self, province=None):
         return self.get_queryset().municipalities(province)
 
-    def citymun(self, province=None):
-        return self.get_queryset().citymun(province)
+    def citymuni(self, province=None):
+        return self.get_queryset().citymuni(province)
 
 class Location(models.Model):
     region = models.CharField(max_length=250)

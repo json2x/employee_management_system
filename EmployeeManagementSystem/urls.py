@@ -14,12 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.conf.urls.static import static
 
 from employee import views as employee_views
+from employee import api
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,4 +30,8 @@ urlpatterns = [
     path('', employee_views.index, name='index_page'),
     path('ems/employee/', employee_views.EmployeeView.as_view(), name='employee_view'),
     path('ems/employee/register/', employee_views.EmployeeRegister.as_view(), name='employee_register'),
+
+    #API CALLS
+    path('api/get_provinces/', api.get_provinces),
+    re_path(r'^api/get_citymuni/(?P<province>[\w\s]*)$', api.get_citymuni),
 ]

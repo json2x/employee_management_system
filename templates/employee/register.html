@@ -144,16 +144,15 @@
           </div>
           <div class="row mb-5">
             <label for="inputText" class="col-sm-3 col-form-label">&nbsp;</label>
-            <div class="col-md-4">
-              <label for="inputCity" class="form-label">City</label>
-              <input type="text" class="form-control" id="inputCity" name="present_city">
-            </div>
             <div class="col-md-5">
-              <label for="inputState" class="form-label">Province</label>
-              <select id="inputState" class="form-select" name="present_province">
-                <option value="NCR" selected>NCR</option>
-                <option value="Married">Married</option>
-                <option value="Widowed">Widowed</option>
+              <label for="inputProvince" class="form-label">Province</label>
+              <select id="inputProvince" class="form-select" name="present_province">
+                <option value="0" selected>Loading...</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="inputCity" class="form-label">City/Muni</label>
+              <select id="inputCity" class="form-select" name="present_city">
               </select>
             </div>
           </div>
@@ -274,4 +273,8 @@
     </div>
   </div> -->
 </section>
+{% endblock %}
+
+{% block customJs %}
+<script src="{% static 'js/location.js' %}"></script>
 {% endblock %}
